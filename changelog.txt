@@ -1,0 +1,4 @@
+*** Smart Subscription For Woocommerce Changelog ***
+
+2024-06-04 - version 1.0.0
+* New - First Release
