@@ -1,0 +1,1 @@
+# smart-subscription-manager-for-woocommerce
