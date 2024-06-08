@@ -2,7 +2,7 @@
 /**
  * Main class for Cart
  *
- * @package     smart-subscription-for-woocommerce/includes/
+ * @package     smart-subscription-manager-for-woocommerce/includes/
  * @since       1.0.0
  */
 
@@ -11,11 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-if ( ! class_exists( 'Ssfw_Cart' ) ) {
+if ( ! class_exists( 'Ssmfw_Cart' ) ) {
 	/**
-	 * Main class for Smart Subscription For Woocommerce
+	 * Main class for Smart Subscription Manager For Woocommerce
 	 */
-	class Ssfw_Cart {
+	class Ssmfw_Cart {
 
 		/**
 		 * Variable to hold instance of this class
@@ -27,7 +27,7 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 		/**
 		 * Get single instance of this class
 		 *
-		 * @return Ssfw_Cart
+		 * @return Ssmfw_Cart
 		 */
 		public static function get_instance() {
 
@@ -43,7 +43,7 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 		 * Constructor of this class.
 		 */
 		private function __construct() {
-			add_action( 'wp_enqueue_scripts', array( $this, 'ssfw_enqueue_scripts' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'ssmfw_enqueue_scripts' ) );
 			add_filter( 'woocommerce_cart_item_price', array( $this, 'change_price_html' ), 10, 3 );
 			add_action( 'woocommerce_checkout_order_processed', array( $this, 'checkout_order_processed' ), 10, 2 );
 			add_action( 'woocommerce_store_api_checkout_order_processed', array( $this, 'checkout_order_processed_hpos' ), 10, 1 );
@@ -58,15 +58,15 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 		/**
 		 * Enqueue style
 		 */
-		public function ssfw_enqueue_scripts() {
+		public function ssmfw_enqueue_scripts() {
 			if ( is_cart() || is_checkout() ) {
-				wp_register_script( 'cart-items-price-format', SSFW_PLUGIN_URL . '/block/cart-items-price-format.js', array( 'wp-data' ), SSFW_PLUGIN_VERSION, true );
+				wp_register_script( 'cart-items-price-format', SSMFW_PLUGIN_URL . '/block/cart-items-price-format.js', array( 'wp-data' ), SSMFW_PLUGIN_VERSION, true );
 				wp_localize_script(
 					'cart-items-price-format',
 					'cart_obj',
 					array(
 						'ajaxurl'           => admin_url( 'admin-ajax.php' ),
-						'place_order_label' => ! empty( trim( get_option( 'ssfw_place_order_label' ) ) ) ? get_option( 'ssfw_place_order_label' ) : '',
+						'place_order_label' => ! empty( trim( get_option( 'ssmfw_place_order_label' ) ) ) ? get_option( 'ssmfw_place_order_label' ) : '',
 					)
 				);
 				wp_enqueue_script( 'cart-items-price-format' );
@@ -83,7 +83,7 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 		public function change_price_html( $price, $item, $key ) {
 			$product  = $item['data'];
 			$quantity = $item['quantity'];
-			if ( ! ssfw_check_if_subscription( $product->get_id() ) ) {
+			if ( ! ssmfw_check_if_subscription( $product->get_id() ) ) {
 				return $price;
 			}
 
@@ -94,7 +94,7 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 					'price' => $product->get_price(),
 				)
 			);
-			$price_html = ssfw_change_subscription_price_html( wc_price( $price ), $product );
+			$price_html = ssmfw_change_subscription_price_html( wc_price( $price ), $product );
 			return $price_html;
 		}
 
@@ -128,18 +128,18 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 
 					if ( ! $is_payment_method_saved ) {
 
-						throw new Exception( __( 'Please enable <strong>Save payment information to my account for future purchases</strong> checkbox to proceed. ', 'smart-subscription-for-woocommerce' ) );
+						throw new Exception( __( 'Please enable <strong>Save payment information to my account for future purchases</strong> checkbox to proceed. ', 'smart-subscription-manager-for-woocommerce' ) );
 					}
 				}
 			}
 			if ( ! empty( WC()->cart->cart_contents ) ) {
 				foreach ( WC()->cart->cart_contents as $cart_item ) {
 					$product_id = $cart_item['data']->get_id();
-					if ( ! ssfw_check_if_subscription( $product_id ) ) {
+					if ( ! ssmfw_check_if_subscription( $product_id ) ) {
 						continue;
 					}
-					$smart_subscription_for_woocommerce = Smart_Subscription_For_Woocommerce::get_instance();
-					$subscription_id                    = is_callable( array( $smart_subscription_for_woocommerce, 'create_subscription_order' ) ) ? $smart_subscription_for_woocommerce->create_subscription_order( $_order, false, $cart_item ) : false;
+					$smart_subscription_manager_for_woocommerce = Smart_Subscription_Manager_For_Woocommerce::get_instance();
+					$subscription_id                            = is_callable( array( $smart_subscription_manager_for_woocommerce, 'create_subscription_order' ) ) ? $smart_subscription_manager_for_woocommerce->create_subscription_order( $_order, false, $cart_item ) : false;
 				}
 			}
 		}
@@ -156,11 +156,11 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 			if ( ! empty( WC()->cart->cart_contents ) ) {
 				foreach ( WC()->cart->cart_contents as $cart_item ) {
 					$product_id = $cart_item['data']->get_id();
-					if ( ! ssfw_check_if_subscription( $product_id ) ) {
+					if ( ! ssmfw_check_if_subscription( $product_id ) ) {
 						continue;
 					}
-					$smart_subscription_for_woocommerce = Smart_Subscription_For_Woocommerce::get_instance();
-					$subscription_id                    = is_callable( array( $smart_subscription_for_woocommerce, 'create_subscription_order' ) ) ? $smart_subscription_for_woocommerce->create_subscription_order( $_order, false, $cart_item ) : false;
+					$smart_subscription_manager_for_woocommerce = Smart_Subscription_Manager_For_Woocommerce::get_instance();
+					$subscription_id                            = is_callable( array( $smart_subscription_manager_for_woocommerce, 'create_subscription_order' ) ) ? $smart_subscription_manager_for_woocommerce->create_subscription_order( $_order, false, $cart_item ) : false;
 
 				}
 			}
@@ -176,15 +176,15 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 		 */
 		public function get_item_data( $data = array(), $cart_item = array() ) {
 
-			if ( empty( $cart_item ) || ! ssfw_check_if_subscription( $cart_item['product_id'] ) ) {
+			if ( empty( $cart_item ) || ! ssmfw_check_if_subscription( $cart_item['product_id'] ) ) {
 				return $data;
 			}
 			$product_id = $cart_item['product_id'];
 			$product    = wc_get_product( $product_id );
-			$price_html = ssfw_change_subscription_price_html( '', $product );
+			$price_html = ssmfw_change_subscription_price_html( '', $product );
 
 			$data[] = array(
-				'name'   => 'ssfw-subsrcription-price-html',
+				'name'   => 'ssmfw-subsrcription-price-html',
 				'hidden' => true,
 				'value'  => $price_html,
 			);
@@ -206,9 +206,9 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 				return $available_gateways;
 			}
 
-			$ssfw_subscription_gateways = self::get_supported_payment_gateways();
+			$ssmfw_subscription_gateways = self::get_supported_payment_gateways();
 			foreach ( $available_gateways as $key => $payment_gateway ) {
-				if ( ! in_array( $key, $ssfw_subscription_gateways ) ) {
+				if ( ! in_array( $key, $ssmfw_subscription_gateways ) ) {
 					unset( $available_gateways[ $key ] );
 				}
 			}
@@ -222,7 +222,7 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 			$check = false;
 			if ( ! empty( WC()->cart ) && ! empty( WC()->cart->get_cart_contents() ) ) {
 				foreach ( WC()->cart->get_cart_contents() as $index => $values ) {
-					if ( ssfw_check_if_subscription( $values['data'] ) ) {
+					if ( ssmfw_check_if_subscription( $values['data'] ) ) {
 						$check = true;
 					}
 				}
@@ -248,7 +248,7 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 		 * @param bool $product NA.
 		 */
 		public function sold_subscription_individually( $is_sold_individually, $product ) {
-			return ssfw_check_if_subscription( $product ) ? true : $is_sold_individually;
+			return ssmfw_check_if_subscription( $product ) ? true : $is_sold_individually;
 		}
 
 		/**
@@ -257,7 +257,7 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 		 * @param string $label NA.
 		 */
 		public function change_place_order_btn_label( $label ) {
-			return ! empty( trim( get_option( 'ssfw_place_order_label' ) ) ) ? get_option( 'ssfw_place_order_label' ) : $label;
+			return ! empty( trim( get_option( 'ssmfw_place_order_label' ) ) ) ? get_option( 'ssmfw_place_order_label' ) : $label;
 		}
 
 		/**
@@ -267,7 +267,7 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
 		 * @param object $product NA.
 		 */
 		public function change_add_to_cart_label( $label, $product ) {
-			return ( ssfw_check_if_subscription( $product ) || ! empty( trim( get_option( 'ssfw_add_to_cart_label' ) ) ) ) ? get_option( 'ssfw_add_to_cart_label' ) : $label;
+			return ( ssmfw_check_if_subscription( $product ) && ! empty( trim( get_option( 'ssmfw_add_to_cart_label' ) ) ) ) ? get_option( 'ssmfw_add_to_cart_label' ) : $label;
 		}
 
 	}
@@ -277,4 +277,4 @@ if ( ! class_exists( 'Ssfw_Cart' ) ) {
  *  Kicking this off by calling 'get_instance()' method
  */
 
-return Ssfw_Cart::get_instance();
+return Ssmfw_Cart::get_instance();

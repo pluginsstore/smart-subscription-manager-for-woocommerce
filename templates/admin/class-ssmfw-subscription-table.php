@@ -2,7 +2,7 @@
 /**
  * Include functions related to admin settings
  *
- * @package     smart-subscription-for-woocommerce/templates/admin
+ * @package     smart-subscription-manager-for-woocommerce/templates/admin
  * @since       1.0.0
  */
 
@@ -19,7 +19,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 /**
  * Define your custom table class
  */
-class Ssfw_Subscription_Table extends WP_List_Table {
+class Ssmfw_Subscription_Table extends WP_List_Table {
 
 	/**
 	 * Prepare data items.
@@ -39,15 +39,15 @@ class Ssfw_Subscription_Table extends WP_List_Table {
 		// Query to get the total number of orders.
 		$total_items = wc_get_orders(
 			array(
-				'type'        => 'smart_subscription',
+				'type'        => 'smart_subscriptions',
 				'meta_query'  => array(
 					'relation' => 'AND',
 					array(
-						'key'     => 'smart_subscription_parent_order_id',
+						'key'     => 'smart_subscriptions_parent_order_id',
 						'compare' => 'EXISTS',
 					),
 					array(
-						'key'     => 'smart_subscription_product_id',
+						'key'     => 'smart_subscriptions_product_id',
 						'value'   => '',
 						'compare' => '!=',
 					),
@@ -59,17 +59,17 @@ class Ssfw_Subscription_Table extends WP_List_Table {
 
 		$data = wc_get_orders(
 			array(
-				'type'       => 'smart_subscription',
+				'type'       => 'smart_subscriptions',
 				'limit'      => $per_page,
 				'offset'     => $offset,
 				'meta_query' => array(
 					'relation' => 'AND',
 					array(
-						'key'     => 'smart_subscription_parent_order_id',
+						'key'     => 'smart_subscriptions_parent_order_id',
 						'compare' => 'EXISTS',
 					),
 					array(
-						'key'     => 'smart_subscription_product_id',
+						'key'     => 'smart_subscriptions_product_id',
 						'value'   => '',
 						'compare' => '!=',
 					),
@@ -136,9 +136,9 @@ class Ssfw_Subscription_Table extends WP_List_Table {
 	 * @return string
 	 */
 	public function column_default( $item, $column_name ) {
-		$product_id      = $item->get_meta( 'smart_subscription_product_id' );
+		$product_id      = $item->get_meta( 'smart_subscriptions_product_id' );
 		$product         = wc_get_product( $product_id );
-		$parent_order_id = $item->get_meta( 'smart_subscription_parent_order_id' );
+		$parent_order_id = $item->get_meta( 'smart_subscriptions_parent_order_id' );
 		$parent_order    = wc_get_order( $parent_order_id );
 		switch ( $column_name ) {
 			case 'subscription_order':
@@ -168,8 +168,8 @@ class Ssfw_Subscription_Table extends WP_List_Table {
 	}
 }
 
-$my_table = new Ssfw_Subscription_Table();
+$my_table = new Ssmfw_Subscription_Table();
 $my_table->prepare_items();
-echo '<h1>' . esc_html__( 'Subscription Table', 'smart-subscription-for-woocommerce' ) . '</h1>';
+echo '<h1>' . esc_html__( 'Subscription Table', 'smart-subscription-manager-for-woocommerce' ) . '</h1>';
 $my_table->display();
 

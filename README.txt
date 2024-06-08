@@ -1,4 +1,4 @@
-=== Smart Subscription For Woocommerce ===
+=== Smart Subscription Manager For Woocommerce ===
 Contributors: PluginsStore
 Donate link: https://www.pluginsstore.org/
 Tags: smart WooCommerce subscription, subscription, recurring revenue
@@ -12,7 +12,7 @@ Smart way to managing subscription products.
 
 == Description ==
 
-The Smart Subscription For Woocommerce plugin is designed to provide an intelligent subscription management system for WooCommerce, making it easy to handle recurring payments and subscriptions seamlessly.
+The Smart Subscription Manager For Woocommerce plugin is designed to provide an intelligent subscription management system for WooCommerce, making it easy to handle recurring payments and subscriptions seamlessly.
 
 ## Features
 
@@ -59,3 +59,12 @@ Plugin manages iteslf recurring  revenue, you do not need to worry about this
 Yes, this is fully compatible with WooCommerce Stripe payment gateway
 
 
+== Changelog ==
+
+= 1.0.0 - RELEASED ON 8 JUNE 2024 =
+
+* First version
+
+== Upgrade Notice ==
+= 1.0.0 - RELEASED ON 8 JUNE 2024 =
+* First version

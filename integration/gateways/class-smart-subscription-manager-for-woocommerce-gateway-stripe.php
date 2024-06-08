@@ -2,18 +2,18 @@
 /**
  * Stripe Payment Integration.
  *
- * @package     Smart Subscription For Woocommerce
- * @subpackage  Smart Subscription For Woocommerce/integration/gateways
+ * @package     Smart Subscription Manager For Woocommerce
+ * @subpackage  Smart Subscription Manager For Woocommerce/integration/gateways
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-if ( ! class_exists( 'Smart_Subscription_For_Woocommerce_Gateway_Stripe' ) ) {
+if ( ! class_exists( 'Smart_Subscription_Manager_For_Woocommerce_Gateway_Stripe' ) ) {
 	/**
 	 * Smart Subscription Gateway Stripe.
 	 */
-	class Smart_Subscription_For_Woocommerce_Gateway_Stripe extends WC_Gateway_Stripe {
+	class Smart_Subscription_Manager_For_Woocommerce_Gateway_Stripe extends WC_Gateway_Stripe {
 
 		/**
 		 * Stripe gateway id
@@ -25,7 +25,7 @@ if ( ! class_exists( 'Smart_Subscription_For_Woocommerce_Gateway_Stripe' ) ) {
 		/**
 		 * Get single instance of this class
 		 *
-		 * @return Smart_Subscription_For_Woocommerce_Gateway_Stripe
+		 * @return Smart_Subscription_Manager_For_Woocommerce_Gateway_Stripe
 		 */
 		public static function get_instance() {
 
@@ -60,7 +60,7 @@ if ( ! class_exists( 'Smart_Subscription_For_Woocommerce_Gateway_Stripe' ) ) {
 		 * @param bool $use_order_source NA.
 		 */
 		public function process_payment( $_order_id, $retry = true, $forcefully_save_source = false, $prev_error = false, $use_order_source = false ) {
-			$is_subscription = function_exists( 'ssfw_check_if_subscription_product_exist' ) ? ssfw_check_if_subscription_product_exist( $order_id ) : false;
+			$is_subscription = function_exists( 'ssmfw_check_if_subscription_product_exist' ) ? ssmfw_check_if_subscription_product_exist( $order_id ) : false;
 
 			if ( $is_subscription ) {
 				return parent::process_payment( $_order_id, $retry, true, $prev_error );
@@ -113,12 +113,12 @@ if ( ! class_exists( 'Smart_Subscription_For_Woocommerce_Gateway_Stripe' ) ) {
 		 *
 		 * @throws WC_Stripe_Exception As handling expception.
 		 */
-		public function ssfw_process_stripe_renewal_payment( $renewal_order, $subscription_id, $payment_method ) {
+		public function ssmfw_process_stripe_renewal_payment( $renewal_order, $subscription_id, $payment_method ) {
 
 			if ( ! is_object( $renewal_order ) ) {
 				return false;
 			}
-			$subscription_id = $renewal_order->get_meta( 'smart_subscription_id' );
+			$subscription_id = $renewal_order->get_meta( 'smart_subscriptions_id' );
 			$is_renewal      = $renewal_order->get_meta( 'is_smart_subscription_renewal_order' );
 			if ( ! $subscription_id || 'yes' !== $is_renewal ) {
 
@@ -127,7 +127,7 @@ if ( ! class_exists( 'Smart_Subscription_For_Woocommerce_Gateway_Stripe' ) ) {
 			$order_id       = $renewal_order->get_id();
 			$previous_error = false;
 			$renewal_order->update_status( 'pending' );
-			$parent_id    = $renewal_order->get_meta( 'smart_subscription_parent_order_id' );
+			$parent_id    = $renewal_order->get_meta( 'smart_subscriptions_parent_order_id' );
 			$parent_order = wc_get_order( $parent_id );
 			if ( 'stripe' !== $payment_method ) {
 

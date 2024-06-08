@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const isCartContext = args?.context === 'cart';
             const isOrderSummaryContext = args?.context === 'summary';
             const cartItem = args?.cartItem.item_data;
-            const swsPrice = cartItem.find( item => item.name === 'ssfw-subsrcription-price-html');
+            const swsPrice = cartItem.find( item => item.name === 'ssmfw-subsrcription-price-html');
             if ( isCartContext || isOrderSummaryContext ) {
                
                     
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         
         
-        registerCheckoutFilters( 'ssfw-cart-checkout-filter', {
+        registerCheckoutFilters( 'ssmfw-cart-checkout-filter', {
             subtotalPriceFormat: modifySubtotalPriceFormat,
             placeOrderButtonLabel: modifyPlaceOrderButtonLabel,
         } );

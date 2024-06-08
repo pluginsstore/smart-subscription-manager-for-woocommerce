@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Smart Subscription For Woocommerce
+ * Plugin Name: Smart Subscription Manager For Woocommerce
  * Plugin URI: #
  * Description:
  * Version: 1.0.0
@@ -12,12 +12,12 @@
  * Tested up to: 6.4.3
  * WC requires at least: 4.0.0
  * WC tested up to: 8.9.1
- * Text Domain: smart-subscription-for-woocommerce
+ * Text Domain: smart-subscription-manager-for-woocommerce
  * Domain Path: /languages/
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  *
- * @package smart-subscription-for-woocommerce
+ * @package smart-subscription-manager-for-woocommerce
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -29,11 +29,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Check woocommerce activation.
  */
-function load_smart_subscription_for_woocommerce() {
-	define( 'SSFW_PLUGIN_FILE', __FILE__ );
-	$ssfw_new_admin_email = get_option( 'new_admin_email', '' );
-	$ssfw_admin_email     = empty( $ssfw_new_admin_email ) ? get_option( 'admin_email', '' ) : $ssfw_new_admin_email;
-	add_option( 'ssfw_admin_email_id', $ssfw_admin_email, '', 'no' );
+function load_smart_subscription_manager_for_woocommerce() {
+	define( 'SSMFW_PLUGIN_FILE', __FILE__ );
+	$ssmfw_new_admin_email = get_option( 'new_admin_email', '' );
+	$ssmfw_admin_email     = empty( $ssmfw_new_admin_email ) ? get_option( 'admin_email', '' ) : $ssmfw_new_admin_email;
+	add_option( 'ssmfw_admin_email_id', $ssmfw_admin_email, '', 'no' );
 
 	$active_plugins = (array) get_option( 'active_plugins', array() );
 	if ( is_multisite() ) {
@@ -41,28 +41,27 @@ function load_smart_subscription_for_woocommerce() {
 	}
 
 	if ( ( in_array( 'woocommerce/woocommerce.php', $active_plugins, true ) || array_key_exists( 'woocommerce/woocommerce.php', $active_plugins ) ) ) {
-		include_once 'includes/class-smart-subscription-for-woocommerce.php';
-		$GLOBALS['smart_subscription_for_woocommerce'] = Smart_Subscription_For_Woocommerce::get_instance();
+		include_once 'includes/class-smart-subscription-manager-for-woocommerce.php';
+		$GLOBALS['smart_subscription_manager_for_woocommerce'] = Smart_Subscription_Manager_For_Woocommerce::get_instance();
 
 	} elseif ( is_admin() ) {
 		?>
 			<div class="notice notice-error">
-				<p><?php echo esc_html__( 'Smart Subscription For Woocommerce requires WooCommerce to be activated.', 'smart-subscription-for-woocommerce' ); ?></p>
+				<p><?php echo esc_html__( 'Smart Subscription Manager For Woocommerce requires WooCommerce to be activated.', 'smart-subscription-manager-for-woocommerce' ); ?></p>
 			</div>
 			<?php
 
 	}
 }
-add_action( 'plugins_loaded', 'load_smart_subscription_for_woocommerce' );
+add_action( 'plugins_loaded', 'load_smart_subscription_manager_for_woocommerce' );
 
-register_activation_hook( __FILE__, 'smart_subscription_for_woocommerce_activate' );
+register_activation_hook( __FILE__, 'smart_subscription_manager_for_woocommerce_activate' );
 
 /**
  * Function to activate the subscription  plugin.
  */
-function smart_subscription_for_woocommerce_activate() {
-	include_once 'includes/class-ssfw-install.php';
-
+function smart_subscription_manager_for_woocommerce_activate() {
+	// Activation work.
 }
 
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'add_plugin_settings_link' );
@@ -76,16 +75,16 @@ function add_plugin_settings_link( $links ) {
 				$settings_link = add_query_arg(
 					array(
 						'page' => 'wc-settings',
-						'tab'  => 'smart-subscription-for-woocommerce-settings',
+						'tab'  => 'smart-subscription-manager-for-woocommerce-settings',
 					),
 					admin_url( 'admin.php' )
 				);
 
-		$ssfw_links = array(
-			'settings' => '<a href="' . esc_url( $settings_link ) . '">' . esc_html( __( 'Settings', 'smart-subscription-for-woocommerce' ) ) . '</a>',
+		$ssmfw_links = array(
+			'settings' => '<a href="' . esc_url( $settings_link ) . '">' . esc_html( __( 'Settings', 'smart-subscription-manager-for-woocommerce' ) ) . '</a>',
 		);
 
-		return array_merge( $ssfw_links, $links );
+		return array_merge( $ssmfw_links, $links );
 }
 
 
@@ -94,8 +93,8 @@ add_action(
 	function() {
 		if ( class_exists( '\WC_Gateway_Stripe' ) ) {
 
-			include_once 'integration/gateways/class-smart-subscription-for-woocommerce-gateway-stripe.php';
-			include_once 'integration/gateways/class-ssfw-stripe-integration.php';
+			include_once 'integration/gateways/class-smart-subscription-manager-for-woocommerce-gateway-stripe.php';
+			include_once 'integration/gateways/class-ssmfw-stripe-integration.php';
 		}
 	}
 );
