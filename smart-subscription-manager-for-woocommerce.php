@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Smart Subscription Manager For Woocommerce
  * Plugin URI: #
- * Description:
+ * Description: Effortlessly manage recurring subscriptions on your WooCommerce store with the Smart Subscription Manager. Automate renewals, customize plans, and boost customer retention seamlessly.
  * Version: 1.0.0
  * Author: PluginsStore
  * Author URI: https://pluginsstore.org/
